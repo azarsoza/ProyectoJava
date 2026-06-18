@@ -1,5 +1,4 @@
 package dao;
-
 import conexion.Conexion;
 import modelo.Categoria;
 import java.sql.Connection;
@@ -17,8 +16,8 @@ public class CategoriaDAO {
         String sql ="INSERT INTO categoria (nombre) "
                 + "VALUES(?)";
         try (
-            Connection cn = Conexion.getConexion();
-            PreparedStatement ps = cn.prepareStatement(sql)
+                Connection cn = Conexion.getConexion();
+                PreparedStatement ps = cn.prepareStatement(sql)
                 ){
             
                 ps.setString(1, categoria.getNombre());

@@ -6,28 +6,29 @@ import java.util.List;
 
 public class ProductoService {
     private ProductoDAO dao;
-    
-    public ProductoService(){
+
+    public ProductoService() {
         dao = new ProductoDAO();
     }
-    
-    public boolean insertar(Producto producto){
+
+    public boolean insertar(Producto producto) {
         return dao.insertar(producto);
     }
-    
-    public boolean actualizar(Producto producto){
+
+    public boolean actualizar(Producto producto) {
         return dao.actualizar(producto);
     }
-    
-    public boolean eliminar(int idProducto){
+
+    // Llama al borrado lógico (activo = 0)
+    public boolean eliminar(int idProducto) {
         return dao.eliminar(idProducto);
     }
-    
-    public Producto buscar(int idProducto){
+
+    public Producto buscar(int idProducto) {
         return dao.buscar(idProducto);
     }
-    
-    public List<Producto> listar(){
+
+    public List<Producto> listar() {
         return dao.listar();
     }
 }

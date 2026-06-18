@@ -7,17 +7,17 @@ import vista.FrmProducto;
 
 public class Main {
     public static void main(String[] args) {
-        try {
-            Connection cn = Conexion.getConexion() ;
-            System.out.println("Conexion exitosa");
-            cn.close();
+        //try {
+         //   Connection cn = Conexion.getConexion() ;
+         //   System.out.println("Conexion exitosa");
+         //   cn.close();
             
             FrmProducto frm = new FrmProducto();
             frm.setLocationRelativeTo(null);
             frm.setVisible(true);
             
-        } catch (SQLException e) {
-            System.out.println("Error de conexion" + e.getMessage());
-        }
+        //} catch (SQLException e) {
+        //    System.out.println("Error de conexion" + e.getMessage());
+        //}
     }
 }

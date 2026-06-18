@@ -90,7 +90,7 @@ public class FrmProducto extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "Código", "Categoria", "Nombre", "Precio", "Stock"
+                "Código", "Categoria", "Nombre", "Precio", "Estado"
             }
         ));
         tblProducto.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -219,11 +219,11 @@ public class FrmProducto extends javax.swing.JFrame {
 
         if (fila >= 0) {
             txtIdProducto.setText(tblProducto.getValueAt(fila, 0).toString());
-            txtNombre.setText(tblProducto.getValueAt(fila, 1).toString());
-            txtPrecio.setText(tblProducto.getValueAt(fila, 2).toString());
-            chkActivo.setSelected(Boolean.parseBoolean(tblProducto.getValueAt(fila, 3).toString()
-    )
-);
+            txtNombre.setText(tblProducto.getValueAt(fila, 2).toString());
+            txtPrecio.setText(tblProducto.getValueAt(fila, 3).toString());
+            
+            String estado = tblProducto.getValueAt(fila, 4).toString();
+            chkActivo.setSelected(estado.equals("Activo"));
         }
     }//GEN-LAST:event_tblProductoMouseClicked
 
@@ -289,13 +289,13 @@ public class FrmProducto extends javax.swing.JFrame {
 
         for (Producto producto : lista) {
 
-            Object[] fila = new Object[4];
+            Object[] fila = new Object[5];
 
             fila[0] = producto.getIdProducto();
             fila[1] = producto.getCategoria().getNombre();
             fila[2] = producto.getNombre();
             fila[3] = producto.getPrecioVenta();
-            fila[4] = producto.getActivo();
+            fila[4] = producto.getActivo() ? "Activo" : "Desactivado";
 
             modelo.addRow(fila);
         }
@@ -303,12 +303,8 @@ public class FrmProducto extends javax.swing.JFrame {
     }
     
     private void cargarCategoria(){
-        System.out.println("Entró a cargarCategoria");
-
         CategoriaService servicioCategoria = new CategoriaService();
         categorias = servicioCategoria.listar();
-
-        System.out.println("Cantidad: " + categorias.size());
 
         cboCategoria.removeAllItems();
 

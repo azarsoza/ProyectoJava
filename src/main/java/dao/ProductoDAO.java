@@ -14,7 +14,7 @@ public class ProductoDAO {
     
     public boolean insertar(Producto producto){
     
-        String sql ="INSERT INTO producto(id_categoria, nombre, precio_venta, activo)"
+        String sql ="INSERT INTO producto(id_categoria, nombre, precio_venta, activo) "
                 + "VALUES(?,?,?,?)";
         
         try (Connection cn = Conexion.getConexion();
@@ -28,8 +28,6 @@ public class ProductoDAO {
             ps.setBoolean(4, producto.getActivo());
             
             ps.executeUpdate(); 
-            ps.close();
-            cn.close();
             
             return true;
             
@@ -45,9 +43,10 @@ public class ProductoDAO {
                 + "SET id_categoria=?, nombre=?, precio_venta=?, activo=? "
                 + "WHERE id_producto=?";
         
-        try {
-            Connection cn = Conexion.getConexion();
-            PreparedStatement ps = cn.prepareStatement(sql);
+        try (
+                Connection cn = Conexion.getConexion();
+                PreparedStatement ps = cn.prepareStatement(sql)
+            ){
             
             ps.setInt(1, producto.getCategoria().getIdCategoria());
             ps.setString(2,producto.getNombre());
@@ -55,11 +54,7 @@ public class ProductoDAO {
             ps.setBoolean(4, producto.getActivo());
             ps.setInt(5, producto.getIdProducto());
             
-            ps.executeUpdate();
-            ps.close();
-            cn.close();
-            
-            return true;
+            return ps.executeUpdate() > 0;
             
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -69,20 +64,17 @@ public class ProductoDAO {
     
     public boolean eliminar(int idProducto){
         
-        String sql = "UPDATE producto"
-                + "SET activo = false"
+        String sql = "UPDATE producto "
+                + "SET activo = false "
                 + "WHERE id_producto=?";
         
-        try {
-            Connection cn = Conexion.getConexion(); 
-            PreparedStatement ps = cn.prepareStatement(sql);
-            
+        try (
+                Connection cn = Conexion.getConexion(); 
+                PreparedStatement ps = cn.prepareStatement(sql);
+            ){
             ps.setInt(1, idProducto);            
-            ps.executeUpdate();
             
-            ps.close();
-            cn.close();
-            return true;    
+            return ps.executeUpdate() > 0;
             
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -97,12 +89,14 @@ public class ProductoDAO {
                 + "ON p.id_categoria = c.id_categoria "
                 + "WHERE p.id_producto=?";
         
-        try {
+        try (
             Connection cn = Conexion.getConexion();  
             PreparedStatement ps = cn.prepareStatement(sql);
+                ){
             
             ps.setInt(1, idProducto);
-            ResultSet rs = ps.executeQuery();
+            
+            try(ResultSet rs = ps.executeQuery()){
             
             if (rs.next()) {
                 Producto producto = new Producto();
@@ -116,17 +110,11 @@ public class ProductoDAO {
                 producto.setNombre(rs.getString("nombre"));
                 producto.setPrecioVenta(rs.getDouble("precio_venta"));
                 producto.setActivo(rs.getBoolean("activo")); 
-                
-                rs.close();
-                ps.close();
-                cn.close();
-                
+                   
                 return producto;        
             }
+            }
             
-            rs.close();
-            ps.close();
-            cn.close();    
             
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -163,8 +151,6 @@ public class ProductoDAO {
             }
             
             rs.close();
-            ps.close();
-            cn.close();
             
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());

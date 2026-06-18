@@ -14,18 +14,16 @@ public class CategoriaDAO {
     
     public boolean insertar(Categoria categoria){
         
-        String sql ="INSER INTO categoria (nombre)"
+        String sql ="INSERT INTO categoria (nombre) "
                 + "VALUES(?)";
-        try {
+        try (
             Connection cn = Conexion.getConexion();
-            PreparedStatement ps = cn.prepareStatement(sql);
-            ps.setString(1, categoria.getNombre());
+            PreparedStatement ps = cn.prepareStatement(sql)
+                ){
             
-            ps.executeUpdate();
-            ps.close();
-            cn.close();
-            
-            return true;
+                ps.setString(1, categoria.getNombre());
+                        
+                return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
             return false;
@@ -34,20 +32,18 @@ public class CategoriaDAO {
     
     public boolean actualizar(Categoria categoria){
         
-        String sql ="UPDATE categoria"
-                + "SET nombre=?"
+        String sql ="UPDATE categoria "
+                + "SET nombre=? "
                 + "WHERE id_categoria=?";
-        try {
+        try (
             Connection cn = Conexion.getConexion();
             PreparedStatement ps = cn.prepareStatement(sql);
-            ps.setString(1, categoria.getNombre());
-            ps.setInt(2, categoria.getIdCategoria());
+                ){
+                ps.setString(1, categoria.getNombre());
+                ps.setInt(2, categoria.getIdCategoria());
             
-            ps.executeUpdate();
-            ps.close();
-            cn.close();
-            
-            return true;
+                return ps.executeUpdate() > 0;
+                
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
             return false;
@@ -56,19 +52,18 @@ public class CategoriaDAO {
     
     public boolean elimnar(int idCategoria){
         
-        String sql = "DELETE FROM categoria"
+        String sql = "DELETE FROM categoria "
                 + "WHERE id_categoria=?";
         
-        try {
+        try (
             Connection cn = Conexion.getConexion();
             PreparedStatement ps = cn.prepareStatement(sql);
+                ){
             
             ps.setInt(1, idCategoria);
             ps.executeUpdate();
             
-            ps.close();
-            cn.close();
-            return true;
+            return ps.executeUpdate() > 0;
             
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -78,37 +73,29 @@ public class CategoriaDAO {
     
     public Categoria buscar(int idCategoria){
         
-        String sql = "SELECT * FROM categoria"
+        String sql = "SELECT * FROM categoria "
                 + "WHERE id_categoria=?";
         
-        try {
+        try (
             Connection cn = Conexion.getConexion();
             PreparedStatement ps = cn.prepareStatement(sql);
+                ){
             
-            ps.setInt(1, idCategoria);
-            ResultSet rs = ps.executeQuery();
-            
-            if (rs.next()) {
-                Categoria categoria = new Categoria();
-                
-                categoria.setIdCategoria(rs.getInt("id_categoria"));
-                categoria.setNombre(rs.getString("nombre"));
-                
-                rs.close();
-                ps.close();
-                cn.close();
-                
-                return categoria;
+                ps.setInt(1, idCategoria);
+            try(ResultSet rs = ps.executeQuery()){
+                if (rs.next()) {
+                    Categoria categoria = new Categoria();
+
+                    categoria.setIdCategoria(rs.getInt("id_categoria"));
+                    categoria.setNombre(rs.getString("nombre"));
+
+                    return categoria;
+                }
             }
-            
-            rs.close();
-            ps.close();
-            cn.close();            
-            
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
-        return null;
+            return null;
     }
     
     public List<Categoria> listar(){
@@ -117,10 +104,11 @@ public class CategoriaDAO {
         String sql = "SELECT * FROM categoria "
                 + "ORDER BY nombre";
         
-        try {
+        try (
             Connection cn = Conexion.getConexion();
             PreparedStatement ps = cn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
+                ){
             
             while(rs.next()){
                 Categoria categoria = new Categoria();
@@ -129,10 +117,6 @@ public class CategoriaDAO {
                 categoria.setNombre(rs.getString("nombre"));
                 lista.add(categoria);
             }
-            
-            rs.close();
-            ps.close();
-            cn.close();
             
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());

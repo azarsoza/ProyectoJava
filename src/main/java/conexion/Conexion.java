@@ -9,7 +9,7 @@ public class Conexion {
     private static final String USER = "aca8ee_tiendas";
     private static final String PASSWORD = "Forza2026";
     
-    public static Connection getConexion(){
+    public static Connection getConexion() throws SQLException{
         try {
             return DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {

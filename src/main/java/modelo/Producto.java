@@ -2,24 +2,42 @@ package modelo;
 
 public class Producto {   
     private int idProducto;
+    private Categoria categoria;
     private String nombre;
     private double precioVenta;
-    private int stock;
+    private boolean activo;
     
-        public Producto() {
+    public Producto() {
     }
         
-    public Producto(int idProducto, String nombre, double precioVenta, int stock) {
+    public Producto(int idProducto, Categoria categoria, String nombre, double precioVenta, boolean activo) {
         this.idProducto = idProducto;
+        this.categoria = categoria;
         this.nombre = nombre;
         this.precioVenta = precioVenta;
-        this.stock = stock;
+        this.activo = activo;
     }
     
-        public int getIdProducto() {
+    public int getIdProducto() {
         return idProducto;
     }
 
+    public Categoria getCategoria() {
+        return categoria;
+    }     
+    
+    public String getNombre() {
+        return nombre;
+    }
+
+    public double getPrecioVenta() {
+        return precioVenta;
+    }                
+
+    public boolean getActivo() {
+        return activo;
+    }              
+        
     public void setIdProducto(int idProducto) {
         if (idProducto <= 0){
             throw new IllegalArgumentException("El Id debe ser mayor que 0.");
@@ -27,19 +45,18 @@ public class Producto {
         this.idProducto = idProducto;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public void setCategoria(Categoria categoria) {
+        if (categoria == null){
+            throw new IllegalArgumentException("La categoria no puede estar vacia");
+        }
+        this.categoria = categoria;
+    }  
 
     public void setNombre(String nombre) {
         if (nombre == null || nombre.trim().isEmpty()){
             throw new IllegalArgumentException("El nombre es obligatorio");
         }
         this.nombre = nombre;
-    }
-
-    public double getPrecioVenta() {
-        return precioVenta;
     }
 
     public void setPrecioVenta(double precioVenta) {
@@ -49,14 +66,7 @@ public class Producto {
         this.precioVenta = precioVenta;
     }
 
-    public int getStock() {
-        return stock;
-    }
-
-    public void setStock(int stock) {
-        if(stock < 0){
-            throw new IllegalArgumentException("El stock no puede ser negativo");
-        }
-        this.stock = stock;
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 }

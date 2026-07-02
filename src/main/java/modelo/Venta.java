@@ -70,4 +70,26 @@ public class Venta {
         this.impuesto = subtotal * valorImpuesto;
         this.total = subtotal + impuesto;
     }
+    
+    public void setValorImpuesto(double valorImpuesto) {
+        if (valorImpuesto < 0) {
+            throw new IllegalArgumentException("El valor del impuesto no puede ser negativo");
+        }
+        this.valorImpuesto = valorImpuesto;
+    }
+
+    public void setImpuesto(double impuesto) {
+        if (impuesto < 0) {
+            throw new IllegalArgumentException("El impuesto no puede ser negativo");
+        }
+        this.impuesto = impuesto;
+    }
+
+    public void setTotal(double total) {
+        if (total < 0) {
+            throw new IllegalArgumentException("El total no puede ser negativo");
+        }
+        this.total = total;
+    }
+    
 }

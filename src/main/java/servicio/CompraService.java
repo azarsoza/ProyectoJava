@@ -1,0 +1,24 @@
+package servicio;
+
+import dao.CompraDAO;
+import java.util.List;
+import modelo.Compra;
+import modelo.DetalleCompra;
+
+public class CompraService {
+    private CompraDAO dao;
+    
+    public CompraService() {
+        dao = new CompraDAO();
+    }
+    
+    // Este método sirve para mandarle la compra al DAO
+    public boolean insertar(Compra compra, List<DetalleCompra> detalles) {
+        return dao.insertar(compra, detalles);
+    }
+    
+    // Este método servirá para ver el historial de compras
+    public List<Compra> listar() {
+        return dao.listar();
+    }
+}

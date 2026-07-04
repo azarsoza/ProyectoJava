@@ -11,7 +11,8 @@ import modelo.Usuario;
 public class UsuarioDAO {
     
     public boolean insertar(Usuario usuario){
-        String sql ="";
+        String sql ="INSERT INTO usuario (nombre, usuario, clave, rol, activo) "
+                + "VALUES (?, ?, ?, ?, ?)";
         
         try (
                 Connection cn = Conexion.getConexion();
@@ -20,8 +21,9 @@ public class UsuarioDAO {
             
             ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getUsuario());
-            ps.setString(3, usuario.getRol());
-            ps.setBoolean(4, usuario.getActivo());
+            ps.setString(3, usuario.getClave());
+            ps.setString(4, usuario.getRol());
+            ps.setString(5, usuario.getActivo());
             
              return ps.executeUpdate() > 0;
              
@@ -32,7 +34,10 @@ public class UsuarioDAO {
     }
     
     public boolean actualizar(Usuario usuario){
-        String sql = "";
+        String sql = "UPDATE usuario "
+                + "SET nombre = ?, usuario = ?,"
+                + "clave = ?, rol = ?, activo = ? "
+                + "WHERE id_usuario = ?";
         
         try (
                 Connection cn = Conexion.getConexion();
@@ -41,9 +46,10 @@ public class UsuarioDAO {
             
             ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getUsuario());
-            ps.setString(3, usuario.getRol());
-            ps.setBoolean(4, usuario.getActivo());
-            ps.setInt(5,usuario.getIdUsuario());
+            ps.setString(3, usuario.getClave());
+            ps.setString(4, usuario.getRol());
+            ps.setString(5, usuario.getActivo());
+            ps.setInt(6,usuario.getIdUsuario());
             
             return ps.executeUpdate() > 0;
             
@@ -54,7 +60,9 @@ public class UsuarioDAO {
     }
     
     public boolean eliminar(int idUsuario){
-        String sql = "";
+        String sql = "UPDATE usuario "
+                + "SET activo = 'Inactivo' "
+                + "WHERE id_usuario = ?";
         
         try (
                 Connection cn = Conexion.getConexion();
@@ -62,7 +70,6 @@ public class UsuarioDAO {
                 ){
             
             ps.setInt(1, idUsuario);
-            ps.executeUpdate();
             
             return ps.executeUpdate() > 0;
             
@@ -73,21 +80,24 @@ public class UsuarioDAO {
     }
     
     public Usuario buscar(int idUsuario){
-        String sql ="";
+        String sql =" SELECT * FROM usuario "
+                + "WHERE id_usuario = ?";
         
         try (
                 Connection cn = Conexion.getConexion();
                 PreparedStatement ps = cn.prepareStatement(sql);
                 ){
+                
+                ps.setInt(1, idUsuario);
              try(ResultSet rs = ps.executeQuery()){
                 if (rs.next()) {
                     Usuario usuario = new Usuario();
                     
-                    usuario.setIdUsuario(rs.getInt("idUsuario"));
+                    usuario.setIdUsuario(rs.getInt("id_usuario"));
                     usuario.setNombre(rs.getString("nombre"));
                     usuario.setUsuario(rs.getString("usuario"));
-                    usuario.setClave(rs.getString("clave"));
-                    usuario.setActivo(rs.getBoolean("activo"));
+                    usuario.setRol(rs.getString("rol"));
+                    usuario.setActivo(rs.getString("activo"));
                     
                     return usuario;
                 }
@@ -101,7 +111,8 @@ public class UsuarioDAO {
     public List<Usuario> listar(){
         List<Usuario> lista = new ArrayList<>();
         
-        String sql = "";
+        String sql = "SELECT * FROM usuario "
+                + "ORDER BY nombre";
         
         try (
                 Connection cn = Conexion.getConexion();
@@ -112,16 +123,50 @@ public class UsuarioDAO {
             while(rs.next()){
                 Usuario usuario = new Usuario();
                 
-                    usuario.setIdUsuario(rs.getInt("idUsuario"));
+                    usuario.setIdUsuario(rs.getInt("id_usuario"));
                     usuario.setNombre(rs.getString("nombre"));
                     usuario.setUsuario(rs.getString("usuario"));
-                    usuario.setClave(rs.getString("clave"));
-                    usuario.setActivo(rs.getBoolean("activo"));
+                    usuario.setRol(rs.getString("rol"));
+                    usuario.setActivo(rs.getString("activo"));
                     lista.add(usuario);
             }
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
             return lista;        
+    }
+    
+    public Usuario login(String usuario, String clave){
+        String sql = "SELECT * FROM usuario "
+                    + "WHERE usuario = ? "
+                    + "AND clave = ? "
+                    + "AND activo = 'Activo'";
+        
+        try(
+                Connection cn = Conexion.getConexion();
+                PreparedStatement ps = cn.prepareStatement(sql)){
+            
+                ps.setString(1, usuario);
+                ps.setString(2, clave);
+                
+               try(ResultSet rs = ps.executeQuery()){
+                
+                    if(rs.next()) {
+                        Usuario usu = new Usuario();
+
+                        usu.setIdUsuario(rs.getInt("id_usuario"));
+                        usu.setNombre(rs.getString("nombre"));
+                        usu.setUsuario(rs.getString("usuario"));
+                        usu.setClave(rs.getString("clave"));
+                        usu.setRol(rs.getString("rol"));
+                        usu.setActivo(rs.getString("activo"));
+
+                        return usu;
+                    }
+                }
+            } catch(SQLException e){
+                System.out.println("Error: " + e.getMessage());
+            }
+        return null;
     }
 }

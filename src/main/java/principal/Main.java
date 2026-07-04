@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import vista.FrmProducto;
 import vista.Principal;
+import vista.FrmLogin;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,7 +14,7 @@ public class Main {
          //   System.out.println("Conexion exitosa");
          //   cn.close();
             
-            Principal frm = new Principal();
+            FrmLogin frm = new FrmLogin();
             frm.setLocationRelativeTo(null);
             frm.setVisible(true);
             

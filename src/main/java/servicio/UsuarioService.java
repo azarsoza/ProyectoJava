@@ -30,4 +30,8 @@ public class UsuarioService {
         return dao.listar();
     }
     
+    public Usuario login(String usuario, String clave){
+    return dao.login(usuario, clave);
+}
+    
 }

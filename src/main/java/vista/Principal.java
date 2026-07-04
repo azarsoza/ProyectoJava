@@ -1,34 +1,76 @@
 package vista;
+import modelo.Usuario;
 
 public class Principal extends javax.swing.JFrame {
     private FrmProducto producto = null;
+    private FrmCompra compra = null;
+    private FrmVenta venta = null;
+    private FrmUsuarios usuario = null;
+    private FrmCategoria categoria = null;
+    private Usuario u;
     
-    public Principal() {
+    public Principal(Usuario u) {
         initComponents();
         
+        this.u = u;
+        cargarDatosUsuario();
     }
 
+    private void cargarDatosUsuario() {
+        lblUsuario.setText("Usuario: " + u.getNombre());
+        lblFecha.setText("Fecha: " + java.time.LocalDate.now());
+        lblFormulario.setText("Formulario: Inicio");
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         desktopPane = new javax.swing.JDesktopPane();
+        jPanel1 = new javax.swing.JPanel();
+        lblUsuario = new javax.swing.JLabel();
+        lblFecha = new javax.swing.JLabel();
+        lblFormulario = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        usuarioMenuItem1 = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
         fileMenu = new javax.swing.JMenu();
         productosMenuItem = new javax.swing.JMenuItem();
-        categoriaMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
-        cutMenuItem = new javax.swing.JMenuItem();
-        copyMenuItem = new javax.swing.JMenuItem();
+        compraMenuItem = new javax.swing.JMenuItem();
+        consultacomprasMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
-        contentMenuItem = new javax.swing.JMenuItem();
-        aboutMenuItem = new javax.swing.JMenuItem();
+        ventaMenuItem = new javax.swing.JMenuItem();
+        consultaventasMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setLayout(new java.awt.GridLayout());
+
+        lblUsuario.setText("jLabel1");
+        jPanel1.add(lblUsuario);
+
+        lblFecha.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblFecha.setText("jLabel2");
+        jPanel1.add(lblFecha);
+
+        lblFormulario.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblFormulario.setText("jLabel3");
+        jPanel1.add(lblFormulario);
+
+        desktopPane.add(jPanel1);
+        jPanel1.setBounds(0, 760, 880, 30);
+
         jMenu1.setText("Archivo");
+
+        usuarioMenuItem1.setText("Usuario");
+        usuarioMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usuarioMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(usuarioMenuItem1);
 
         exitMenuItem.setMnemonic('x');
         exitMenuItem.setText("Salir");
@@ -53,40 +95,41 @@ public class Principal extends javax.swing.JFrame {
         });
         fileMenu.add(productosMenuItem);
 
-        categoriaMenuItem.setMnemonic('s');
-        categoriaMenuItem.setText("Categoria");
-        fileMenu.add(categoriaMenuItem);
-
         menuBar.add(fileMenu);
 
         editMenu.setMnemonic('e');
         editMenu.setText("Compras");
 
-        cutMenuItem.setMnemonic('t');
-        cutMenuItem.setText("Registrar Compra");
-        cutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        compraMenuItem.setMnemonic('t');
+        compraMenuItem.setText("Registrar Compra");
+        compraMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cutMenuItemActionPerformed(evt);
+                compraMenuItemActionPerformed(evt);
             }
         });
-        editMenu.add(cutMenuItem);
+        editMenu.add(compraMenuItem);
 
-        copyMenuItem.setMnemonic('y');
-        copyMenuItem.setText("Consultar Compras");
-        editMenu.add(copyMenuItem);
+        consultacomprasMenuItem.setMnemonic('y');
+        consultacomprasMenuItem.setText("Consultar Compras");
+        editMenu.add(consultacomprasMenuItem);
 
         menuBar.add(editMenu);
 
         helpMenu.setMnemonic('h');
         helpMenu.setText("Ventas");
 
-        contentMenuItem.setMnemonic('c');
-        contentMenuItem.setText("Registrar Venta");
-        helpMenu.add(contentMenuItem);
+        ventaMenuItem.setMnemonic('c');
+        ventaMenuItem.setText("Registrar Venta");
+        ventaMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ventaMenuItemActionPerformed(evt);
+            }
+        });
+        helpMenu.add(ventaMenuItem);
 
-        aboutMenuItem.setMnemonic('a');
-        aboutMenuItem.setText("Consultar Ventas");
-        helpMenu.add(aboutMenuItem);
+        consultaventasMenuItem.setMnemonic('a');
+        consultaventasMenuItem.setText("Consultar Ventas");
+        helpMenu.add(consultaventasMenuItem);
 
         menuBar.add(helpMenu);
 
@@ -96,15 +139,11 @@ public class Principal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(desktopPane, javax.swing.GroupLayout.PREFERRED_SIZE, 1233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 882, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(desktopPane, javax.swing.GroupLayout.PREFERRED_SIZE, 823, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 789, Short.MAX_VALUE)
         );
 
         pack();
@@ -120,59 +159,86 @@ public class Principal extends javax.swing.JFrame {
             this.desktopPane.add(producto);
         }       
         producto.setVisible(true);
+        lblFormulario.setText("Formulario: " + producto.getTitle());
     }//GEN-LAST:event_productosMenuItemActionPerformed
 
-    private void cutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cutMenuItemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cutMenuItemActionPerformed
+    private void compraMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compraMenuItemActionPerformed
+        if(compra == null || compra.isClosed()){
+            compra = new FrmCompra();
+            this.desktopPane.add(compra);
+        }
+        compra.setVisible(true);
+        lblFormulario.setText("Formulario: " + compra.getTitle());
+    }//GEN-LAST:event_compraMenuItemActionPerformed
+
+    private void ventaMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ventaMenuItemActionPerformed
+        if(venta == null || venta.isClosed()){
+            venta = new FrmVenta();
+            this.desktopPane.add(venta);
+        }
+        venta.setVisible(true);
+        lblFormulario.setText("Formulario: " + venta.getTitle());
+    }//GEN-LAST:event_ventaMenuItemActionPerformed
+
+    private void usuarioMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioMenuItem1ActionPerformed
+        if(usuario == null || usuario.isClosed()){
+            usuario = new FrmUsuarios();
+            this.desktopPane.add(usuario);
+        }
+        usuario.setVisible(true);
+        lblFormulario.setText("Formulario: " + usuario.getTitle());
+    }//GEN-LAST:event_usuarioMenuItem1ActionPerformed
 
 
-    public static void main(String args[]) {
+    //public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+      //  //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+    //    try {
+  //          for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+     //           if ("Nimbus".equals(info.getName())) {
+     //               javax.swing.UIManager.setLookAndFeel(info.getClassName());
+    //                break;
+    //            }
+     //       }
+    //    } catch (ClassNotFoundException ex) {
+    //        java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+     //   } catch (InstantiationException ex) {
+    //        java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+     //   } catch (IllegalAccessException ex) {
+    //        java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+     //       java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    //    }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Principal().setVisible(true);
-            }
-        });
-    }
+        //java.awt.EventQueue.invokeLater(new Runnable() {
+           // public void run() {
+          //      new Principal().setVisible(true);
+        //    }
+      //  });
+    //}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem aboutMenuItem;
-    private javax.swing.JMenuItem categoriaMenuItem;
-    private javax.swing.JMenuItem contentMenuItem;
-    private javax.swing.JMenuItem copyMenuItem;
-    private javax.swing.JMenuItem cutMenuItem;
+    private javax.swing.JMenuItem compraMenuItem;
+    private javax.swing.JMenuItem consultacomprasMenuItem;
+    private javax.swing.JMenuItem consultaventasMenuItem;
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblFecha;
+    private javax.swing.JLabel lblFormulario;
+    private javax.swing.JLabel lblUsuario;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem productosMenuItem;
+    private javax.swing.JMenuItem usuarioMenuItem1;
+    private javax.swing.JMenuItem ventaMenuItem;
     // End of variables declaration//GEN-END:variables
 
 }

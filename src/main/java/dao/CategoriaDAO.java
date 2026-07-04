@@ -60,7 +60,6 @@ public class CategoriaDAO {
                 ){
             
             ps.setInt(1, idCategoria);
-            ps.executeUpdate();
             
             return ps.executeUpdate() > 0;
             

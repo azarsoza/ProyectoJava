@@ -6,12 +6,12 @@ public class Usuario {
     private String usuario;
     private String clave;
     private String rol;
-    private boolean activo;
+    private String activo;
 
     public Usuario() {
     }   
 
-    public Usuario(int idUsuario, String nombre, String usuario, String clave, String rol, boolean activo) {
+    public Usuario(int idUsuario, String nombre, String usuario, String clave, String rol, String activo) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.usuario = usuario;
@@ -40,7 +40,7 @@ public class Usuario {
         return rol;
     }
 
-    public boolean getActivo() {
+    public String getActivo() {
         return activo;
     }
 
@@ -91,7 +91,7 @@ public class Usuario {
         this.rol = rol;
     }
 
-    public void setActivo(boolean activo) {
+    public void setActivo(String activo) {
         this.activo = activo;
     }
 

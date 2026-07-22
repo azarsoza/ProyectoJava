@@ -17,7 +17,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private void cargarDatosUsuario() {
-        lblUsuario.setText("Usuario: " + u.getNombre());
+        
         lblFecha.setText("Fecha: " + java.time.LocalDate.now());
         lblFormulario.setText("Formulario: Inicio");
     }

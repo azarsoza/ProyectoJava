@@ -13,7 +13,7 @@ import modelo.Venta;
 import modelo.DetalleVenta;
 
 public class VentaDAO {
-    
+    private final Connection cn = Conexion.getInstancia().getConexion();
     // Método principal transaccional: Registra la Venta y todos sus detalles juntos
     public boolean insertar(Venta venta, List<DetalleVenta> detalles) {
         String sqlVenta = "INSERT INTO venta (id_usuario, fecha, valor_impuesto, impuesto, total) VALUES (?, ?, ?, ?, ?)";
@@ -25,7 +25,6 @@ public class VentaDAO {
         ResultSet rs = null;
         
         try {
-            cn = Conexion.getConexion();
             // Iniciamos la transacción: no se guarda nada de forma automática
             cn.setAutoCommit(false);
             
@@ -100,9 +99,7 @@ public class VentaDAO {
                    + "INNER JOIN usuario u ON v.id_usuario = u.id_usuario "
                    + "ORDER BY v.id_venta DESC";
         
-        try (
-            Connection cn = Conexion.getConexion();
-            PreparedStatement ps = cn.prepareStatement(sql);
+        try (PreparedStatement ps = cn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery()
         ) {
             while (rs.next()) {
@@ -116,7 +113,7 @@ public class VentaDAO {
                 // Mapeamos el usuario que realizó la venta de manera segura
                 Usuario usuario = new Usuario();
                 usuario.setIdUsuario(rs.getInt("id_usuario"));
-                usuario.setNombre(rs.getString("nombre_usuario"));
+                
                 venta.setUsuario(usuario);
                 
                 lista.add(venta);

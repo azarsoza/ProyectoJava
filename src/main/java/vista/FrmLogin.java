@@ -115,7 +115,7 @@ public class FrmLogin extends javax.swing.JFrame {
         Usuario u = servicio.login(usuario, clave);
 
         if (u != null) {
-            JOptionPane.showMessageDialog(this, "Bienvenido " + u.getNombre());
+            JOptionPane.showMessageDialog(this, "Bienvenido ");
 
             this.dispose();
             Principal frm = new Principal(u);

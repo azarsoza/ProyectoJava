@@ -422,7 +422,7 @@ public class FrmProducto extends javax.swing.JInternalFrame  {
             Object[] fila = new Object[5];
 
             fila[0] = producto.getIdProducto();
-            fila[1] = producto.getCategoria().getNombre();
+            fila[1] = producto.getCategoria().nombre();
             fila[2] = producto.getNombre();
             fila[3] = producto.getPrecioVenta();
             fila[4] = producto.getActivo() ? "Activo" : "Desactivado";
@@ -439,8 +439,8 @@ public class FrmProducto extends javax.swing.JInternalFrame  {
         cboCategoria.removeAllItems();
 
         for (Categoria categoria : categorias) {
-            System.out.println(categoria.getNombre());
-            cboCategoria.addItem(categoria.getNombre());
+            System.out.println(categoria.nombre());
+            cboCategoria.addItem(categoria.nombre());
         }
     }
     

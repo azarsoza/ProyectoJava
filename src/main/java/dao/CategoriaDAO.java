@@ -8,39 +8,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class CategoriaDAO {
+public class CategoriaDAO implements ICrudDAO<Categoria>{
+    private final Connection cn = Conexion.getInstancia().getConexion();
     
+    @Override
     public boolean insertar(Categoria categoria){
-        
         String sql ="INSERT INTO categoria (nombre) "
                 + "VALUES(?)";
-        try (
-                Connection cn = Conexion.getConexion();
-                PreparedStatement ps = cn.prepareStatement(sql)
-                ){
-            
-                ps.setString(1, categoria.getNombre());
-                        
-                return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
-            return false;
-        }
-    }
-    
-    public boolean actualizar(Categoria categoria){
-        
-        String sql ="UPDATE categoria "
-                + "SET nombre=? "
-                + "WHERE id_categoria=?";
-        try (
-            Connection cn = Conexion.getConexion();
-            PreparedStatement ps = cn.prepareStatement(sql);
-                ){
-                ps.setString(1, categoria.getNombre());
-                ps.setInt(2, categoria.getIdCategoria());
-            
+        try (PreparedStatement ps = cn.prepareStatement(sql)){
+                ps.setString(1, categoria.nombre());
                 return ps.executeUpdate() > 0;
                 
         } catch (SQLException e) {
@@ -49,18 +25,30 @@ public class CategoriaDAO {
         }
     }
     
-    public boolean elimnar(int idCategoria){
-        
+    @Override
+    public boolean actualizar(Categoria categoria){
+        String sql ="UPDATE categoria "
+                + "SET nombre=? "
+                + "WHERE id_categoria=?";
+        try (PreparedStatement ps = cn.prepareStatement(sql);){
+                ps.setString(1, categoria.nombre());
+                ps.setInt(2, categoria.idCategoria());
+                return ps.executeUpdate() > 0;
+                
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    
+    @Override 
+    public boolean eliminar(int idCategoria){
         String sql = "DELETE FROM categoria "
                 + "WHERE id_categoria=?";
         
-        try (
-            Connection cn = Conexion.getConexion();
-            PreparedStatement ps = cn.prepareStatement(sql);
-                ){
-            
+        try (PreparedStatement ps = cn.prepareStatement(sql);){
             ps.setInt(1, idCategoria);
-            
             return ps.executeUpdate() > 0;
             
         } catch (SQLException e) {
@@ -69,24 +57,18 @@ public class CategoriaDAO {
         }
     }
     
+    @Override
     public Categoria buscar(int idCategoria){
-        
         String sql = "SELECT * FROM categoria "
                 + "WHERE id_categoria=?";
         
-        try (
-            Connection cn = Conexion.getConexion();
-            PreparedStatement ps = cn.prepareStatement(sql);
-                ){
-            
+        try (PreparedStatement ps = cn.prepareStatement(sql);){
                 ps.setInt(1, idCategoria);
             try(ResultSet rs = ps.executeQuery()){
                 if (rs.next()) {
-                    Categoria categoria = new Categoria();
-
-                    categoria.setIdCategoria(rs.getInt("id_categoria"));
-                    categoria.setNombre(rs.getString("nombre"));
-
+                    Categoria categoria = new Categoria(
+                        rs.getInt("id_categoria"),
+                           rs.getString("nombre"));
                     return categoria;
                 }
             }
@@ -96,26 +78,22 @@ public class CategoriaDAO {
             return null;
     }
     
+    @Override
     public List<Categoria> listar(){
         List<Categoria> lista = new ArrayList<>();
         
         String sql = "SELECT * FROM categoria "
                 + "ORDER BY nombre";
         
-        try (
-            Connection cn = Conexion.getConexion();
-            PreparedStatement ps = cn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-                ){
-            
+        try (PreparedStatement ps = cn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();){
             while(rs.next()){
-                Categoria categoria = new Categoria();
-                
-                categoria.setIdCategoria(rs.getInt("id_categoria"));
-                categoria.setNombre(rs.getString("nombre"));
+                Categoria categoria = new Categoria(
+                    rs.getInt("id_categoria"),
+                       rs.getString("nombre"));
+
                 lista.add(categoria);
             }
-            
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }

@@ -301,7 +301,6 @@ public class FrmUsuarios extends javax.swing.JInternalFrame {
             Usuario usuario = new Usuario();
 
             usuario.setIdUsuario(Integer.parseInt(txtIdUsuario.getText()));
-            usuario.setNombre(txtNombres.getText());
             usuario.setUsuario(txtUsuario.getText());
             usuario.setClave(new String(txtClave.getPassword()));
             usuario.setRol((String) cboRol.getSelectedItem());
@@ -340,7 +339,6 @@ public class FrmUsuarios extends javax.swing.JInternalFrame {
         try {
             Usuario usuario = new Usuario();
 
-            usuario.setNombre(txtNombres.getText());
             usuario.setUsuario(txtUsuario.getText());
             usuario.setClave(new String(txtClave.getPassword()));
             usuario.setRol(cboRol.getSelectedItem().toString());
@@ -394,7 +392,6 @@ public class FrmUsuarios extends javax.swing.JInternalFrame {
             Object[] fila = new Object[5];
 
             fila[0] = usuario.getIdUsuario();
-            fila[1] = usuario.getNombre();
             fila[2] = usuario.getUsuario();
             fila[3] = usuario.getRol();
             fila[4] = usuario.getActivo();
@@ -448,4 +445,8 @@ public class FrmUsuarios extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtNombres;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
+
+    public void setLocationRelativeTo(Object object) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

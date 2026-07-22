@@ -4,7 +4,7 @@ import modelo.Producto;
 import java.util.List;
 
 public class ProductoService {
-    private ProductoDAO dao;
+    private final ProductoDAO dao;
     
     public ProductoService(){
         dao = new ProductoDAO();

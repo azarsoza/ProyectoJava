@@ -152,9 +152,9 @@ public class FrmCategoria extends javax.swing.JFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         
         try {
-            Categoria categoria = new Categoria();
-            
-            categoria.setNombre(txtNombre.getText());
+            Categoria categoria = new Categoria(
+                    1,
+                    txtNombre.getText());        
             
             if (servicio.insertar(categoria)) {
                 JOptionPane.showMessageDialog(this,"Categoria registrada");;
@@ -171,10 +171,9 @@ public class FrmCategoria extends javax.swing.JFrame {
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         try {
-            Categoria categoria = new Categoria();
-            
-            categoria.setIdCategoria(Integer.parseInt(txtIdCategoria.getText()));
-            categoria.setNombre(txtNombre.getText());
+            Categoria categoria = new Categoria(
+                    Integer.parseInt(txtIdCategoria.getText()),
+                    txtNombre.getText());
             
             if (servicio.actualizar(categoria)) {
                 JOptionPane.showMessageDialog(this,"Categoria actualizada");
@@ -205,14 +204,12 @@ public class FrmCategoria extends javax.swing.JFrame {
         
         List<Categoria> lista = servicio.listar();
         
-        for (Categoria categoria : lista){
-            Object[] fila = new Object[2];
-            
-            fila[0] = categoria.getIdCategoria();
-            fila[1]= categoria.getNombre();
-            
-            modelo.addRow(fila);
-        }
+        lista.forEach(c -> modelo.addRow(new Object[]{
+                    c.idCategoria(),
+                    c.nombre()
+                })
+        );
+        
         tblCategoria.setModel(modelo);    
     }
     

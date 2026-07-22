@@ -4,7 +4,7 @@ import java.util.List;
 import modelo.Categoria;
 
 public class CategoriaService {
-    private CategoriaDAO dao;
+    private final CategoriaDAO dao;
     
     public CategoriaService(){
         dao = new CategoriaDAO();
@@ -19,7 +19,7 @@ public class CategoriaService {
     }
     
     public boolean eliminar(int idCategoria){
-        return dao.elimnar(idCategoria);
+        return dao.eliminar(idCategoria);
     }
     
     public Categoria buscar(int idCategoria){

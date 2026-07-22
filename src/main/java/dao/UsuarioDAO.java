@@ -9,17 +9,14 @@ import java.util.List;
 import modelo.Usuario;
 
 public class UsuarioDAO {
-    
+    private final Connection cn = Conexion.getInstancia().getConexion();
+        
     public boolean insertar(Usuario usuario){
-        String sql ="INSERT INTO usuario (nombre, usuario, clave, rol, activo) "
+        String sql ="INSERT INTO usuario (usuario, clave, rol, activo) "
                 + "VALUES (?, ?, ?, ?, ?)";
         
-        try (
-                Connection cn = Conexion.getConexion();
-                PreparedStatement ps = cn.prepareStatement(sql)
-                ){
+        try (PreparedStatement ps = cn.prepareStatement(sql)){
             
-            ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getUsuario());
             ps.setString(3, usuario.getClave());
             ps.setString(4, usuario.getRol());
@@ -35,16 +32,12 @@ public class UsuarioDAO {
     
     public boolean actualizar(Usuario usuario){
         String sql = "UPDATE usuario "
-                + "SET nombre = ?, usuario = ?,"
+                + "SET usuario = ?,"
                 + "clave = ?, rol = ?, activo = ? "
                 + "WHERE id_usuario = ?";
         
-        try (
-                Connection cn = Conexion.getConexion();
-                PreparedStatement ps = cn.prepareStatement(sql);
-                ){
+        try (PreparedStatement ps = cn.prepareStatement(sql);){
             
-            ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getUsuario());
             ps.setString(3, usuario.getClave());
             ps.setString(4, usuario.getRol());
@@ -64,10 +57,7 @@ public class UsuarioDAO {
                 + "SET activo = 'Inactivo' "
                 + "WHERE id_usuario = ?";
         
-        try (
-                Connection cn = Conexion.getConexion();
-                PreparedStatement ps = cn.prepareStatement(sql); 
-                ){
+        try (PreparedStatement ps = cn.prepareStatement(sql);){
             
             ps.setInt(1, idUsuario);
             
@@ -83,10 +73,7 @@ public class UsuarioDAO {
         String sql =" SELECT * FROM usuario "
                 + "WHERE id_usuario = ?";
         
-        try (
-                Connection cn = Conexion.getConexion();
-                PreparedStatement ps = cn.prepareStatement(sql);
-                ){
+        try (PreparedStatement ps = cn.prepareStatement(sql);){
                 
                 ps.setInt(1, idUsuario);
              try(ResultSet rs = ps.executeQuery()){
@@ -94,7 +81,6 @@ public class UsuarioDAO {
                     Usuario usuario = new Usuario();
                     
                     usuario.setIdUsuario(rs.getInt("id_usuario"));
-                    usuario.setNombre(rs.getString("nombre"));
                     usuario.setUsuario(rs.getString("usuario"));
                     usuario.setRol(rs.getString("rol"));
                     usuario.setActivo(rs.getString("activo"));
@@ -114,9 +100,7 @@ public class UsuarioDAO {
         String sql = "SELECT * FROM usuario "
                 + "ORDER BY nombre";
         
-        try (
-                Connection cn = Conexion.getConexion();
-                PreparedStatement ps = cn.prepareStatement(sql);
+        try (PreparedStatement ps = cn.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery();
                 ){
             
@@ -124,7 +108,6 @@ public class UsuarioDAO {
                 Usuario usuario = new Usuario();
                 
                     usuario.setIdUsuario(rs.getInt("id_usuario"));
-                    usuario.setNombre(rs.getString("nombre"));
                     usuario.setUsuario(rs.getString("usuario"));
                     usuario.setRol(rs.getString("rol"));
                     usuario.setActivo(rs.getString("activo"));
@@ -142,9 +125,7 @@ public class UsuarioDAO {
                     + "AND clave = ? "
                     + "AND activo = 'Activo'";
         
-        try(
-                Connection cn = Conexion.getConexion();
-                PreparedStatement ps = cn.prepareStatement(sql)){
+        try(PreparedStatement ps = cn.prepareStatement(sql)){
             
                 ps.setString(1, usuario);
                 ps.setString(2, clave);
@@ -155,7 +136,6 @@ public class UsuarioDAO {
                         Usuario usu = new Usuario();
 
                         usu.setIdUsuario(rs.getInt("id_usuario"));
-                        usu.setNombre(rs.getString("nombre"));
                         usu.setUsuario(rs.getString("usuario"));
                         usu.setClave(rs.getString("clave"));
                         usu.setRol(rs.getString("rol"));

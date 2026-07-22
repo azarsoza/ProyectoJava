@@ -9,7 +9,30 @@ public class Conexion {
     private static final String USER = "aca8ee_tiendas";
     private static final String PASSWORD = "Forza2026";
     
-    public static Connection getConexion() throws SQLException{
-        return DriverManager.getConnection(URL,USER,PASSWORD);
+    private static Conexion instancia;
+    private Connection conexion;
+    
+    private Conexion(){
+        try{
+            conexion = DriverManager.getConnection(URL, USER, PASSWORD);
+            
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
     }
+    
+    public static Conexion getInstancia(){
+        if(instancia == null){
+            instancia = new Conexion();
+        }
+        return instancia;
+    }
+    
+    public Connection getConexion(){
+        return conexion;
+    }
+    
+//    public static Connection getConexion() throws SQLException{
+//        return DriverManager.getConnection(URL,USER,PASSWORD);
+//    }
 }

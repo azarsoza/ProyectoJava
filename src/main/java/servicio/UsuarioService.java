@@ -4,7 +4,7 @@ import java.util.List;
 import modelo.Usuario;
 
 public class UsuarioService {
-    private UsuarioDAO dao;
+    private final UsuarioDAO dao;
     
     public UsuarioService(){
         dao = new UsuarioDAO();

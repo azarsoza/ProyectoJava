@@ -6,7 +6,7 @@ import modelo.Venta;
 import modelo.DetalleVenta;
 
 public class VentaService {
-    private VentaDAO dao;
+    private final VentaDAO dao;
     
     public VentaService() {
         dao = new VentaDAO();

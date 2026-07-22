@@ -13,7 +13,8 @@ import modelo.DetalleCompra;
 import modelo.Usuario;
 
 public class CompraDAO {
-    
+    private final Connection cn = Conexion.getInstancia().getConexion();
+        
     // Método principal transaccional: Registra la Compra y todos sus detalles juntos
     public boolean insertar(Compra compra, List<DetalleCompra> detalles) {
         String sqlCompra = "INSERT INTO compra (id_usuario, fecha, valor_impuesto, impuesto, total) VALUES (?, ?, ?, ?, ?)";
@@ -24,8 +25,7 @@ public class CompraDAO {
         PreparedStatement psDetalle = null;
         ResultSet rs = null;
         
-        try {
-            cn = Conexion.getConexion();
+        try {           
             // Iniciamos la transacción
             cn.setAutoCommit(false);
             
@@ -97,9 +97,7 @@ public class CompraDAO {
                    + "INNER JOIN usuario u ON c.id_usuario = u.id_usuario "
                    + "ORDER BY c.id_compra DESC";
         
-        try (
-            Connection cn = Conexion.getConexion();
-            PreparedStatement ps = cn.prepareStatement(sql);
+        try (PreparedStatement ps = cn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery()
         ) {
             while (rs.next()) {
@@ -112,7 +110,7 @@ public class CompraDAO {
                 
                 Usuario usuario = new Usuario();
                 usuario.setIdUsuario(rs.getInt("id_usuario"));
-                usuario.setNombre(rs.getString("nombre_usuario"));
+                
                 compra.setUsuario(usuario);
                 
                 lista.add(compra);

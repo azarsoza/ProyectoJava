@@ -2,7 +2,6 @@ package modelo;
 
 public class Usuario {
     private int idUsuario;
-    private String nombre;
     private String usuario;
     private String clave;
     private String rol;
@@ -11,9 +10,8 @@ public class Usuario {
     public Usuario() {
     }   
 
-    public Usuario(int idUsuario, String nombre, String usuario, String clave, String rol, String activo) {
+    public Usuario(int idUsuario, String usuario, String clave, String rol, String activo) {
         this.idUsuario = idUsuario;
-        this.nombre = nombre;
         this.usuario = usuario;
         this.clave = clave;
         this.rol = rol;
@@ -22,10 +20,6 @@ public class Usuario {
 
     public int getIdUsuario() {
         return idUsuario;
-    }
-
-    public String getNombre() {
-        return nombre;
     }
 
     public String getUsuario() {
@@ -51,16 +45,6 @@ public class Usuario {
         this.idUsuario = idUsuario;
     }
     
-    public void setNombre(String nombre) {
-        if(nombre == null || nombre.trim().isEmpty()){
-            throw new IllegalArgumentException("El nombre es obligatorio");
-        }
-        if(nombre.length() > 100){
-            throw new IllegalArgumentException("El nombre no puede exceder 100 caracteres");
-        }
-        this.nombre = nombre;
-    }
-
     public void setUsuario(String usuario) {
         if(usuario == null || usuario.trim().isEmpty()){
             throw new IllegalArgumentException("El usuario es obligatorio");

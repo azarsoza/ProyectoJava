@@ -7,6 +7,7 @@ public class Principal extends javax.swing.JFrame {
     private FrmVenta venta = null;
     private FrmUsuarios usuario = null;
     private FrmCategoria categoria = null;
+    private FrmEmpleado empleado = null;
     private Usuario u;
     
     public Principal(Usuario u) {
@@ -17,7 +18,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private void cargarDatosUsuario() {
-        
+        lblUsuario.setText("Usuario: " + u.getEmpleado().getNombres() + " " + u.getEmpleado().getApellidos());
         lblFecha.setText("Fecha: " + java.time.LocalDate.now());
         lblFormulario.setText("Formulario: Inicio");
     }
@@ -36,6 +37,7 @@ public class Principal extends javax.swing.JFrame {
         usuarioMenuItem1 = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
         fileMenu = new javax.swing.JMenu();
+        empleadosMenuItem = new javax.swing.JMenuItem();
         productosMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         compraMenuItem = new javax.swing.JMenuItem();
@@ -46,7 +48,7 @@ public class Principal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setLayout(new java.awt.GridLayout());
+        jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
         lblUsuario.setText("jLabel1");
         jPanel1.add(lblUsuario);
@@ -85,6 +87,14 @@ public class Principal extends javax.swing.JFrame {
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("Mantenimientos");
+
+        empleadosMenuItem.setText("Empleados");
+        empleadosMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                empleadosMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(empleadosMenuItem);
 
         productosMenuItem.setMnemonic('o');
         productosMenuItem.setText("Productos");
@@ -189,37 +199,46 @@ public class Principal extends javax.swing.JFrame {
         lblFormulario.setText("Formulario: " + usuario.getTitle());
     }//GEN-LAST:event_usuarioMenuItem1ActionPerformed
 
+    private void empleadosMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_empleadosMenuItemActionPerformed
+        if(empleado == null || empleado.isClosed()){
+            empleado = new FrmEmpleado();
+            this.desktopPane.add(empleado);
+        }
+        empleado.setVisible(true);
+        lblFormulario.setText("Formulario: " + empleado.getTitle());
+    }//GEN-LAST:event_empleadosMenuItemActionPerformed
 
-    //public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-      //  //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-    //    try {
-  //          for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-     //           if ("Nimbus".equals(info.getName())) {
-     //               javax.swing.UIManager.setLookAndFeel(info.getClassName());
-    //                break;
-    //            }
-     //       }
-    //    } catch (ClassNotFoundException ex) {
-    //        java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-     //   } catch (InstantiationException ex) {
-    //        java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-     //   } catch (IllegalAccessException ex) {
-    //        java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-     //       java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    //    }
-        //</editor-fold>
 
-        /* Create and display the form */
-        //java.awt.EventQueue.invokeLater(new Runnable() {
-           // public void run() {
-          //      new Principal().setVisible(true);
-        //    }
-      //  });
-    //}
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new Principal().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem compraMenuItem;
@@ -227,6 +246,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem consultaventasMenuItem;
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JMenu editMenu;
+    private javax.swing.JMenuItem empleadosMenuItem;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;

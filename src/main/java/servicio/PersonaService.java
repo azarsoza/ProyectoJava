@@ -10,8 +10,8 @@ public class PersonaService {
         dao = new PersonaDAO();
     }
     
-    public boolean insertar(Persona persona){
-        return dao.insertar(persona);
+    public boolean guardar(Persona persona){
+        return dao.guardar(persona);
     }
     
     public boolean actualizar(Persona persona){

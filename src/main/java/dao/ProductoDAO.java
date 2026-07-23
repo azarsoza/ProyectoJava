@@ -1,6 +1,5 @@
 package dao;
-
-import conexion.Conexion;
+import conexion.Conexiondb;
 import modelo.Producto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +10,8 @@ import java.util.List;
 import modelo.Categoria;
 
 public class ProductoDAO {
-    private final Connection cn = Conexion.getInstancia().getConexion();
+    private final Connection cn = Conexiondb.getInstance().conectar();
+    
     public boolean insertar(Producto producto){
     
         String sql ="INSERT INTO producto(id_categoria, nombre, precio_venta, activo) "

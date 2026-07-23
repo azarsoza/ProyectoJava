@@ -10,8 +10,8 @@ public class UsuarioService {
         dao = new UsuarioDAO();
     }
     
-    public boolean insertar(Usuario usuario){
-        return dao.insertar(usuario);
+    public boolean guardar(Usuario usuario){
+        return dao.guardar(usuario);
     }
     
     public boolean actualizar(Usuario usuario){
@@ -31,7 +31,11 @@ public class UsuarioService {
     }
     
     public Usuario login(String usuario, String clave){
-    return dao.login(usuario, clave);
-}
+        return dao.login(usuario, clave);
+    }
+    
+    public boolean existeUsuario(String usuario) {
+       return dao.existeUsuario(usuario);
+    }
     
 }

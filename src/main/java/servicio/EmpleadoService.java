@@ -10,8 +10,8 @@ public class EmpleadoService {
         dao = new EmpleadoDAO();
     }
 
-    public boolean insertar(Empleado empleado) {
-        return dao.insertar(empleado);
+    public boolean guardar(Empleado empleado) {
+        return dao.guardar(empleado);
     }
 
     public boolean actualizar(Empleado empleado) {

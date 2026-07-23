@@ -10,7 +10,7 @@ public class ProductoService {
         dao = new ProductoDAO();
     }
     
-    public boolean insertar(Producto producto){
+    public boolean guardar(Producto producto){
         return dao.insertar(producto);
     }
     

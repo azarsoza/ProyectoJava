@@ -1,5 +1,5 @@
 package dao;
-import conexion.Conexion;
+import conexion.Conexiondb;
 import modelo.Categoria;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoriaDAO implements ICrudDAO<Categoria>{
-    private final Connection cn = Conexion.getInstancia().getConexion();
     
     @Override
-    public boolean insertar(Categoria categoria){
-        String sql ="INSERT INTO categoria (nombre) "
-                + "VALUES(?)";
-        try (PreparedStatement ps = cn.prepareStatement(sql)){
+    public boolean guardar(Categoria categoria){
+        String sql ="INSERT INTO categoria (nombre) VALUES(?)";
+        
+        try (Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql)){
                 ps.setString(1, categoria.nombre());
                 return ps.executeUpdate() > 0;
                 
@@ -28,9 +28,12 @@ public class CategoriaDAO implements ICrudDAO<Categoria>{
     @Override
     public boolean actualizar(Categoria categoria){
         String sql ="UPDATE categoria "
-                + "SET nombre=? "
-                + "WHERE id_categoria=?";
-        try (PreparedStatement ps = cn.prepareStatement(sql);){
+                    + "SET nombre=? "
+                    + "WHERE id_categoria=?";
+        
+        try (Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql)){
+            
                 ps.setString(1, categoria.nombre());
                 ps.setInt(2, categoria.idCategoria());
                 return ps.executeUpdate() > 0;
@@ -41,13 +44,13 @@ public class CategoriaDAO implements ICrudDAO<Categoria>{
         }
     }
     
-    
     @Override 
     public boolean eliminar(int idCategoria){
         String sql = "DELETE FROM categoria "
-                + "WHERE id_categoria=?";
+                    + "WHERE id_categoria=?";
         
-        try (PreparedStatement ps = cn.prepareStatement(sql);){
+        try (Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql)){
             ps.setInt(1, idCategoria);
             return ps.executeUpdate() > 0;
             
@@ -60,16 +63,17 @@ public class CategoriaDAO implements ICrudDAO<Categoria>{
     @Override
     public Categoria buscar(int idCategoria){
         String sql = "SELECT * FROM categoria "
-                + "WHERE id_categoria=?";
+                    + "WHERE id_categoria=?";
         
-        try (PreparedStatement ps = cn.prepareStatement(sql);){
+        try (Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql)){
                 ps.setInt(1, idCategoria);
             try(ResultSet rs = ps.executeQuery()){
                 if (rs.next()) {
-                    Categoria categoria = new Categoria(
-                        rs.getInt("id_categoria"),
-                           rs.getString("nombre"));
-                    return categoria;
+                    return new Categoria(
+                            rs.getInt("id_categoria"),
+                            rs.getString("nombre")
+                    );
                 }
             }
         } catch (SQLException e) {
@@ -83,16 +87,16 @@ public class CategoriaDAO implements ICrudDAO<Categoria>{
         List<Categoria> lista = new ArrayList<>();
         
         String sql = "SELECT * FROM categoria "
-                + "ORDER BY nombre";
+                    + "ORDER BY nombre";
         
-        try (PreparedStatement ps = cn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();){
+        try (Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()){
             while(rs.next()){
-                Categoria categoria = new Categoria(
-                    rs.getInt("id_categoria"),
-                       rs.getString("nombre"));
-
-                lista.add(categoria);
+                lista.add(new Categoria(
+                        rs.getInt("id_categoria"),
+                        rs.getString("nombre")
+));
             }
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());

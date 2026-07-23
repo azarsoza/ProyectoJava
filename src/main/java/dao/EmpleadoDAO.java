@@ -1,5 +1,5 @@
 package dao;
-import conexion.Conexion;
+import conexion.Conexiondb;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -8,19 +8,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import modelo.Empleado;
+import modelo.Persona;
 
 public class EmpleadoDAO implements ICrudDAO<Empleado>{
-    private final Connection cn = Conexion.getInstancia().getConexion();
     private final PersonaDAO personaDAO = new PersonaDAO();
     
     @Override
-    public boolean insertar(Empleado empleado) {
+    public boolean guardar(Empleado empleado) {
         
         String sql = " INSERT INTO empleado "
                     + " (id_persona, cargo, fecha_ingreso, salario) "
                     + " VALUES (?, ?, ?, ?) ";
         
-        try{
+        try{Connection cn = Conexiondb.getInstance().conectar();
             cn.setAutoCommit(false);      
             int idPersona = personaDAO.retornandoId(empleado);
             
@@ -60,7 +60,7 @@ public class EmpleadoDAO implements ICrudDAO<Empleado>{
                      + " salario=? "
                      + " WHERE id_empleado=? ";
 
-        try{
+        try{Connection cn = Conexiondb.getInstance().conectar();
             cn.setAutoCommit(false);
             
             if(!personaDAO.actualizar(empleado)){
@@ -104,7 +104,7 @@ public class EmpleadoDAO implements ICrudDAO<Empleado>{
                                    + " WHERE id_persona=? ";
          
 
-        try{
+        try{Connection cn = Conexiondb.getInstance().conectar();
             cn.setAutoCommit(false);
             int idPersona;
             
@@ -115,7 +115,7 @@ public class EmpleadoDAO implements ICrudDAO<Empleado>{
                         cn.rollback();
                         return false;
                     }
-                    idPersona = rs.getInt("idPersona");
+                    idPersona = rs.getInt("id_persona");
                 }
             } 
         
@@ -158,7 +158,8 @@ public class EmpleadoDAO implements ICrudDAO<Empleado>{
                     + " ON e.id_persona = p.id_persona "
                     + " WHERE e.id_empleado=?";
 
-        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+        try (Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, idEmpleado);
             
             try(ResultSet rs = ps.executeQuery()) {
@@ -197,7 +198,8 @@ public class EmpleadoDAO implements ICrudDAO<Empleado>{
                     + " ON e.id_persona = p.id_persona "
                     + " ORDER BY p.apellidos, p.nombres";
 
-        try (PreparedStatement ps = cn.prepareStatement(sql);
+        try (Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
@@ -224,6 +226,7 @@ public class EmpleadoDAO implements ICrudDAO<Empleado>{
    
     private void rollback() {
         try {
+            Connection cn = Conexiondb.getInstance().conectar();
             cn.rollback();
         } catch (SQLException e) {
             System.out.println("Error al hacer rollback: " + e.getMessage());
@@ -232,6 +235,7 @@ public class EmpleadoDAO implements ICrudDAO<Empleado>{
     
     private void restaurarAutoCommit() {
         try {
+            Connection cn = Conexiondb.getInstance().conectar();
             cn.setAutoCommit(true);
         } catch (SQLException e) {
             System.out.println("Error al restaurar AutoCommit: " + e.getMessage());

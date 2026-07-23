@@ -1,5 +1,5 @@
 package dao;
-import conexion.Conexion;
+import conexion.Conexiondb;
 import modelo.Persona;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,10 +10,10 @@ import java.util.List;
 import java.sql.Statement;
 
 public class PersonaDAO  implements ICrudDAO<Persona>{
-    private final Connection cn = Conexion.getInstancia().getConexion();
+    private final Connection cn = Conexiondb.getInstance().conectar();
     
     @Override
-    public boolean insertar(Persona persona) {
+    public boolean guardar(Persona persona) {
         String sql = " INSERT INTO persona "
                      + " (nombres, apellidos, dni, "
                      + " telefono, direccion, "
@@ -84,7 +84,6 @@ public class PersonaDAO  implements ICrudDAO<Persona>{
         }
     }
     
-
     @Override
     public Persona buscar(int idPersona) {
         String sql = " SELECT * FROM persona "

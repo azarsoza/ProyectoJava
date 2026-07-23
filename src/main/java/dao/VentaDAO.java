@@ -1,6 +1,5 @@
 package dao;
-
-import conexion.Conexion;
+import conexion.Conexiondb;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +12,7 @@ import modelo.Venta;
 import modelo.DetalleVenta;
 
 public class VentaDAO {
-    private final Connection cn = Conexion.getInstancia().getConexion();
+    private final Connection cn = Conexiondb.getInstance().conectar();
     // Método principal transaccional: Registra la Venta y todos sus detalles juntos
     public boolean insertar(Venta venta, List<DetalleVenta> detalles) {
         String sqlVenta = "INSERT INTO venta (id_usuario, fecha, valor_impuesto, impuesto, total) VALUES (?, ?, ?, ?, ?)";

@@ -10,8 +10,8 @@ public class CategoriaService {
         dao = new CategoriaDAO();
     }
     
-    public boolean insertar(Categoria categoria){
-        return dao.insertar(categoria);
+    public boolean guardar(Categoria categoria){
+        return dao.guardar(categoria);
     }
     
     public boolean actualizar(Categoria categoria){

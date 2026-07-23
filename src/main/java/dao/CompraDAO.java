@@ -1,6 +1,6 @@
 package dao;
 
-import conexion.Conexion;
+import conexion.Conexiondb;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +13,7 @@ import modelo.DetalleCompra;
 import modelo.Usuario;
 
 public class CompraDAO {
-    private final Connection cn = Conexion.getInstancia().getConexion();
+    private final Connection cn = Conexiondb.getInstance().conectar();
         
     // Método principal transaccional: Registra la Compra y todos sus detalles juntos
     public boolean insertar(Compra compra, List<DetalleCompra> detalles) {

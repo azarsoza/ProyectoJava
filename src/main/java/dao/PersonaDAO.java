@@ -10,7 +10,6 @@ import java.util.List;
 import java.sql.Statement;
 
 public class PersonaDAO  implements ICrudDAO<Persona>{
-    private final Connection cn = Conexiondb.getInstance().conectar();
     
     @Override
     public boolean guardar(Persona persona) {
@@ -20,7 +19,8 @@ public class PersonaDAO  implements ICrudDAO<Persona>{
                      + " correo, activo) "
                      + " VALUES(?,?,?,?,?,?,?) ";
 
-        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+        try (Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql)) {
 
             ps.setString(1, persona.getNombres());
             ps.setString(2, persona.getApellidos());
@@ -40,17 +40,13 @@ public class PersonaDAO  implements ICrudDAO<Persona>{
 
     @Override
     public boolean actualizar(Persona persona) {
-         String sql = " UPDATE persona "
-                      + " SET nombres=?, "
-                      + " apellidos=?, "
-                      + " dni=?, "
-                      + " telefono=?, "
-                      + " direccion=?, "
-                      + " correo=?, "
-                      + " activo=? "
+         String sql = " UPDATE persona SET nombres=?, apellidos=?, "
+                      + " dni=?, telefono=?, direccion=?, "
+                      + " correo=?, activo=? "
                       + " WHERE id_persona=? ";
 
-        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+        try (Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql)) {
 
             ps.setString(1, persona.getNombres());
             ps.setString(2, persona.getApellidos());
@@ -74,7 +70,8 @@ public class PersonaDAO  implements ICrudDAO<Persona>{
         String sql = " DELETE FROM persona "
                       + " WHERE id_persona=? ";
 
-        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+        try (Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, idPersona);
             return ps.executeUpdate() > 0;
             
@@ -89,7 +86,8 @@ public class PersonaDAO  implements ICrudDAO<Persona>{
         String sql = " SELECT * FROM persona "
                       + " WHERE id_persona=? ";
 
-        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+        try (Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, idPersona);
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -118,7 +116,8 @@ public class PersonaDAO  implements ICrudDAO<Persona>{
         String sql = " SELECT * FROM persona "
                      + " ORDER BY apellidos,nombres ";
 
-        try (PreparedStatement ps = cn.prepareStatement(sql);
+        try (Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
@@ -140,14 +139,15 @@ public class PersonaDAO  implements ICrudDAO<Persona>{
         return lista;
     }
     
-    public int retornandoId(Persona persona) {
+    public int retornandoId(Persona persona,  Connection cn) throws SQLException {
         String sql = " INSERT INTO persona"
                     + " (nombres, apellidos, dni,"
                     + " telefono, direccion,"
                     +" correo, activo) "
                     + "VALUES (?,?,?,?,?,?,?)";
         
-        try (PreparedStatement ps = cn.prepareStatement(sql,
+        try (
+                PreparedStatement ps = cn.prepareStatement(sql,
             Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, persona.getNombres());
@@ -159,7 +159,6 @@ public class PersonaDAO  implements ICrudDAO<Persona>{
             ps.setBoolean(7, persona.isActivo());
 
             int filas = ps.executeUpdate();
-        
             if (filas > 0) {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
@@ -167,9 +166,28 @@ public class PersonaDAO  implements ICrudDAO<Persona>{
                     }
                 }
             }
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        } 
         return -1;
+    }
+    
+    public boolean actualizar(Persona persona, Connection cn) throws SQLException {
+         String sql = " UPDATE persona SET nombres=?, apellidos=?, "
+                      + " dni=?, telefono=?, direccion=?, "
+                      + " correo=?, activo=? "
+                      + " WHERE id_persona=? ";
+
+        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setString(1, persona.getNombres());
+            ps.setString(2, persona.getApellidos());
+            ps.setString(3, persona.getDni());
+            ps.setString(4, persona.getTelefono());
+            ps.setString(5, persona.getDireccion());
+            ps.setString(6, persona.getCorreo());
+            ps.setBoolean(7, persona.isActivo());
+            ps.setInt(8, persona.getIdPersona());
+
+            return ps.executeUpdate() > 0;
+        }
     }
 }

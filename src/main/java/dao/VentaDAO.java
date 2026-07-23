@@ -10,15 +10,15 @@ import java.util.List;
 import modelo.Usuario;
 import modelo.Venta;
 import modelo.DetalleVenta;
+import modelo.Producto;
 
 public class VentaDAO {
-    private final Connection cn = Conexiondb.getInstance().conectar();
     // Método principal transaccional: Registra la Venta y todos sus detalles juntos
     public boolean insertar(Venta venta, List<DetalleVenta> detalles) {
         String sqlVenta = "INSERT INTO venta (id_usuario, fecha, valor_impuesto, impuesto, total) VALUES (?, ?, ?, ?, ?)";
         String sqlDetalle = "INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_venta, subtotal) VALUES (?, ?, ?, ?, ?)";
         
-        Connection cn = null;
+        Connection cn = Conexiondb.getInstance().conectar();
         PreparedStatement psVenta = null;
         PreparedStatement psDetalle = null;
         ResultSet rs = null;
@@ -98,8 +98,9 @@ public class VentaDAO {
                    + "INNER JOIN usuario u ON v.id_usuario = u.id_usuario "
                    + "ORDER BY v.id_venta DESC";
         
-        try (PreparedStatement ps = cn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery()
+        try (Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()
         ) {
             while (rs.next()) {
                 Venta venta = new Venta();
@@ -119,6 +120,136 @@ public class VentaDAO {
             }
         } catch (SQLException e) {
             System.out.println("Error al listar historial de ventas: " + e.getMessage());
+        }
+        return lista;
+    }
+    
+    public List<Venta> listarVentas() {
+        List<Venta> lista = new ArrayList<>();
+        
+        String sql = " SELECT v.id_venta, v.fecha, v.valor_impuesto, "
+                + " v.impuesto, v.total, u.id_usuario, u.usuario "
+                + " FROM Venta v INNER JOIN Usuario u "
+                + " ON v.id_usuario = u.id_usuario "
+                + " ORDER BY v.id_venta DESC ";
+
+        try (Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            
+            while (rs.next()) {
+                Venta venta = new Venta();
+                venta.setIdVenta(rs.getInt("id_venta"));
+                venta.setFecha(rs.getDate("fecha"));
+                venta.setValorImpuesto(rs.getDouble("valor_impuesto"));
+                venta.setImpuesto(rs.getDouble("impuesto"));
+                venta.setTotal(rs.getDouble("total"));
+                
+                Usuario usuario = new Usuario();
+                usuario.setIdUsuario(rs.getInt("id_usuario"));
+                usuario.setUsuario(rs.getString("usuario")); // cambia si tu campo tiene otro nombre
+                
+                venta.setUsuario(usuario);
+                
+                lista.add(venta);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return lista;
+    }
+    
+    public boolean eliminar(int idVenta) {
+        String sqlDetalle = "DELETE FROM detalle_venta WHERE id_venta = ?";
+        String sqlVenta = "DELETE FROM venta WHERE id_venta = ?";
+        
+        try (Connection cn = Conexiondb.getInstance().conectar()) {
+            cn.setAutoCommit(false);
+            
+            try (PreparedStatement psDetalle = cn.prepareStatement(sqlDetalle);
+                    PreparedStatement psVenta = cn.prepareStatement(sqlVenta)) {
+        
+                psDetalle.setInt(1, idVenta);
+                psDetalle.executeUpdate();
+                
+                psVenta.setInt(1, idVenta);
+                
+                int filas = psVenta.executeUpdate();
+                cn.commit();
+                return filas > 0;
+            } catch (SQLException e) {
+                cn.rollback();
+                throw e;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return false;
+    }
+    
+    public Venta buscarVenta(int idVenta) {
+        Venta venta = null;
+        
+        String sql = " SELECT v.id_venta, v.fecha, v.valor_impuesto, "
+                    + " v.impuesto, v.total, u.id_usuario, u.usuario "
+                    + " FROM Venta v INNER JOIN Usuario u "
+                    + " ON v.id_usuario = u.id_usuario "
+                    + " WHERE v.id_venta = ? ";
+        
+        try (Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, idVenta);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    venta = new Venta();
+                    venta.setIdVenta(rs.getInt("id_venta"));
+                    venta.setFecha(rs.getDate("fecha"));
+                    venta.setValorImpuesto(rs.getDouble("valor_impuesto"));
+                    venta.setImpuesto(rs.getDouble("impuesto"));
+                    venta.setTotal(rs.getDouble("total"));
+                    
+                    Usuario usuario = new Usuario();
+                    usuario.setIdUsuario(rs.getInt("id_usuario"));
+                    usuario.setUsuario(rs.getString("usuario"));
+                    
+                    venta.setUsuario(usuario);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return venta;
+    }
+    
+    public List<DetalleVenta> listarDetalleVenta(int idVenta){
+        List<DetalleVenta> lista = new ArrayList<>();
+        
+        String sql = " SELECT dv.*, p.nombre " 
+                    + " FROM detalle_venta dv INNER JOIN Producto p "
+                    + " ON dv.id_producto = p.id_producto "
+                    + " WHERE dv.id_venta = ? ";
+        
+        try(Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql)){
+            ps.setInt(1,idVenta);
+            
+            try(ResultSet rs = ps.executeQuery()){
+                while(rs.next()){
+                    Producto producto = new Producto();
+                    producto.setIdProducto(rs.getInt("id_producto"));
+                    producto.setNombre(rs.getString("nombre"));
+                    
+                    DetalleVenta detalle = new DetalleVenta();
+                    detalle.setProducto(producto);
+                    detalle.setCantidad(rs.getDouble("cantidad"));
+                    detalle.setPrecioVenta(rs.getDouble("precio_venta"));
+                    
+                    lista.add(detalle);
+                }
+            }
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
         }
         return lista;
     }

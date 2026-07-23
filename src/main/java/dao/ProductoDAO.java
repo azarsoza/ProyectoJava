@@ -10,14 +10,14 @@ import java.util.List;
 import modelo.Categoria;
 
 public class ProductoDAO {
-    private final Connection cn = Conexiondb.getInstance().conectar();
+    //private final Connection cn = Conexiondb.getInstance().conectar();
     
     public boolean insertar(Producto producto){
-    
         String sql ="INSERT INTO producto(id_categoria, nombre, precio_venta, activo) "
                 + "VALUES(?,?,?,?)";
         
-        try (PreparedStatement ps = cn.prepareStatement(sql);){
+        try ( Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql);){
             
             ps.setInt(1,producto.getCategoria().idCategoria());
             ps.setString(2, producto.getNombre());
@@ -34,13 +34,13 @@ public class ProductoDAO {
         }
     }
     
-    public boolean actualizar(Producto producto){
-        
+    public boolean actualizar(Producto producto){        
         String sql ="UPDATE producto "
                 + "SET id_categoria=?, nombre=?, precio_venta=?, activo=? "
                 + "WHERE id_producto=?";
         
-        try (PreparedStatement ps = cn.prepareStatement(sql)){
+        try ( Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql)){
             
             ps.setInt(1, producto.getCategoria().idCategoria());
             ps.setString(2,producto.getNombre());
@@ -56,13 +56,13 @@ public class ProductoDAO {
         }        
     }
     
-    public boolean eliminar(int idProducto){
-        
+    public boolean eliminar(int idProducto){        
         String sql = "UPDATE producto "
                 + "SET activo = false "
                 + "WHERE id_producto=?";
         
-        try (PreparedStatement ps = cn.prepareStatement(sql);){
+        try ( Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql);){
             ps.setInt(1, idProducto);            
             
             return ps.executeUpdate() > 0;
@@ -73,14 +73,14 @@ public class ProductoDAO {
         }
     }
     
-    public Producto buscar(int idProducto){
-        
+    public Producto buscar(int idProducto){     
         String sql = "SELECT p.*, c.nombre AS categoria "
                 + "FROM producto p INNER JOIN categoria c "
                 + "ON p.id_categoria = c.id_categoria "
                 + "WHERE p.id_producto=?";
         
-        try (PreparedStatement ps = cn.prepareStatement(sql);){
+        try ( Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql);){
             
             ps.setInt(1, idProducto);
             
@@ -116,14 +116,15 @@ public class ProductoDAO {
                 + "ON p.id_categoria = c.id_categoria "
                 + "ORDER BY p.id_producto";
         
-        try (PreparedStatement ps = cn.prepareStatement(sql);
+        try ( Connection cn = Conexiondb.getInstance().conectar();
+                PreparedStatement ps = cn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery()){
             while(rs.next()){
                 Producto producto = new Producto();
                 
                 Categoria categoria = new Categoria(
                         rs.getInt("id_categoria"),
-                           rs.getString("nombre"));
+                           rs.getString("categoria"));
                 
                 producto.setCategoria(categoria);
                 producto.setIdProducto(rs.getInt("id_producto"));

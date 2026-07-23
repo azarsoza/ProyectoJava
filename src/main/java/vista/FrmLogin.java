@@ -1,4 +1,8 @@
 package vista;
+/**
+ *
+ * @author ZARSOZA-PC
+ */
 import javax.swing.JOptionPane;
 import modelo.Usuario;
 import servicio.UsuarioService;

@@ -20,9 +20,11 @@ public class EmpleadoDAO implements ICrudDAO<Empleado>{
                     + " (id_persona, cargo, fecha_ingreso, salario) "
                     + " VALUES (?, ?, ?, ?) ";
         
-        try{Connection cn = Conexiondb.getInstance().conectar();
+        Connection cn = Conexiondb.getInstance().conectar();
+        
+        try{
             cn.setAutoCommit(false);      
-            int idPersona = personaDAO.retornandoId(empleado);
+            int idPersona = personaDAO.retornandoId(empleado, cn);
             
             if(idPersona == -1){
                 cn.rollback();
@@ -63,7 +65,7 @@ public class EmpleadoDAO implements ICrudDAO<Empleado>{
         try{Connection cn = Conexiondb.getInstance().conectar();
             cn.setAutoCommit(false);
             
-            if(!personaDAO.actualizar(empleado)){
+            if(!personaDAO.actualizar(empleado, cn)){
                 cn.rollback();
                 return false;
             }        

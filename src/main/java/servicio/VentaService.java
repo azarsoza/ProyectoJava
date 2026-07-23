@@ -1,5 +1,4 @@
 package servicio;
-
 import dao.VentaDAO;
 import java.util.List;
 import modelo.Venta;
@@ -20,5 +19,21 @@ public class VentaService {
     // Este método servirá para ver el historial en una tabla
     public List<Venta> listar() {
         return dao.listar();
+    }
+    
+    public boolean eliminar(int idVenta) {
+        return dao.eliminar(idVenta);
+    }
+    
+    public List<Venta> listarVentas() {
+        return dao.listarVentas();
+    }
+    
+    public Venta buscarVenta(int idVenta){
+        return dao.buscarVenta(idVenta);
+    }
+
+    public List<DetalleVenta> listarDetalleVenta(int idVenta){
+        return dao.listarDetalleVenta(idVenta);
     }
 }

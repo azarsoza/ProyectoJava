@@ -1,4 +1,8 @@
 package vista;
+/**
+ *
+ * @author ZARSOZA-PC
+ */
 import modelo.Usuario;
 
 public class Principal extends javax.swing.JFrame {
@@ -8,6 +12,8 @@ public class Principal extends javax.swing.JFrame {
     private FrmUsuarios usuario = null;
     private FrmCategoria categoria = null;
     private FrmEmpleado empleado = null;
+    private FrmComprasListar consultaCompra = null;
+    private FrmVentasListar consultaVentas = null;
     private Usuario u;
     
     public Principal(Usuario u) {
@@ -62,7 +68,7 @@ public class Principal extends javax.swing.JFrame {
         jPanel1.add(lblFormulario);
 
         desktopPane.add(jPanel1);
-        jPanel1.setBounds(0, 760, 880, 30);
+        jPanel1.setBounds(0, 760, 1130, 30);
 
         jMenu1.setText("Archivo");
 
@@ -74,7 +80,6 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu1.add(usuarioMenuItem1);
 
-        exitMenuItem.setMnemonic('x');
         exitMenuItem.setText("Salir");
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -85,7 +90,6 @@ public class Principal extends javax.swing.JFrame {
 
         menuBar.add(jMenu1);
 
-        fileMenu.setMnemonic('f');
         fileMenu.setText("Mantenimientos");
 
         empleadosMenuItem.setText("Empleados");
@@ -96,7 +100,6 @@ public class Principal extends javax.swing.JFrame {
         });
         fileMenu.add(empleadosMenuItem);
 
-        productosMenuItem.setMnemonic('o');
         productosMenuItem.setText("Productos");
         productosMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -107,10 +110,8 @@ public class Principal extends javax.swing.JFrame {
 
         menuBar.add(fileMenu);
 
-        editMenu.setMnemonic('e');
         editMenu.setText("Compras");
 
-        compraMenuItem.setMnemonic('t');
         compraMenuItem.setText("Registrar Compra");
         compraMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -119,16 +120,18 @@ public class Principal extends javax.swing.JFrame {
         });
         editMenu.add(compraMenuItem);
 
-        consultacomprasMenuItem.setMnemonic('y');
         consultacomprasMenuItem.setText("Consultar Compras");
+        consultacomprasMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consultacomprasMenuItemActionPerformed(evt);
+            }
+        });
         editMenu.add(consultacomprasMenuItem);
 
         menuBar.add(editMenu);
 
-        helpMenu.setMnemonic('h');
         helpMenu.setText("Ventas");
 
-        ventaMenuItem.setMnemonic('c');
         ventaMenuItem.setText("Registrar Venta");
         ventaMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -137,8 +140,12 @@ public class Principal extends javax.swing.JFrame {
         });
         helpMenu.add(ventaMenuItem);
 
-        consultaventasMenuItem.setMnemonic('a');
         consultaventasMenuItem.setText("Consultar Ventas");
+        consultaventasMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consultaventasMenuItemActionPerformed(evt);
+            }
+        });
         helpMenu.add(consultaventasMenuItem);
 
         menuBar.add(helpMenu);
@@ -149,7 +156,7 @@ public class Principal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 882, Short.MAX_VALUE)
+            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1131, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,6 +214,24 @@ public class Principal extends javax.swing.JFrame {
         empleado.setVisible(true);
         lblFormulario.setText("Formulario: " + empleado.getTitle());
     }//GEN-LAST:event_empleadosMenuItemActionPerformed
+
+    private void consultacomprasMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultacomprasMenuItemActionPerformed
+       if(consultaCompra == null || consultaCompra.isClosed()){
+            consultaCompra = new FrmComprasListar();
+            this.desktopPane.add(consultaCompra);
+        }
+        consultaCompra.setVisible(true);
+        lblFormulario.setText("Formulario: " + consultaCompra.getTitle());
+    }//GEN-LAST:event_consultacomprasMenuItemActionPerformed
+
+    private void consultaventasMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaventasMenuItemActionPerformed
+        if(consultaVentas == null || consultaVentas.isClosed()){
+            consultaVentas = new FrmVentasListar();
+            this.desktopPane.add(consultaVentas);
+        }
+        consultaVentas.setVisible(true);
+        lblFormulario.setText("Formulario: " + consultaVentas.getTitle());
+    }//GEN-LAST:event_consultaventasMenuItemActionPerformed
 
 
 //    public static void main(String args[]) {

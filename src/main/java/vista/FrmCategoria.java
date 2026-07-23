@@ -1,4 +1,8 @@
 package vista;
+/**
+ *
+ * @author ZARSOZA-PC
+ */
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -39,6 +43,8 @@ public class FrmCategoria extends javax.swing.JFrame {
         setTitle("Categorias");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "DATOS", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12), new java.awt.Color(51, 102, 255))); // NOI18N
+
+        txtIdCategoria.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
         jLabel1.setText("Código:");
 

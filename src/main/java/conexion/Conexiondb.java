@@ -25,6 +25,12 @@ public class Conexiondb {
     public Connection conectar() {
         try {
             if (conexion == null || conexion.isClosed() || !conexion.isValid(2)) {
+                 // Cierra la conexion anterior si todavía existe, antes de reemplazarla
+                if (conexion != null && !conexion.isClosed()) {
+                    try {
+                        conexion.close();
+                    } catch (SQLException ignored) {}
+                }
                 conexion = DriverManager.getConnection(URL, USER, PASSWORD);
                 System.out.println("Conectado a la Base de Datos");
             }

@@ -1,5 +1,17 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
+ */
 package vista;
 
+import javax.swing.JOptionPane;
+import modelo.Usuario;
+import servicio.UsuarioService;
+
+/**
+ *
+ * @author anton
+ */
 public class FrmVenta extends javax.swing.JInternalFrame {
 // servicios para comunicarnos con la base de datos
     private servicio.ProductoService servicioProducto;
@@ -17,6 +29,9 @@ public class FrmVenta extends javax.swing.JInternalFrame {
     //variables para acumular los montos totales
     private double subtotalAcumulado = 0.0;
     private final double PORCENTAJE_IMPUESTO = 0.18; // 18% de impuesto
+    
+    private boolean modoConsulta = false;
+    private int idVentaConsulta = 0;
     
 public FrmVenta() {
         initComponents();
@@ -74,17 +89,21 @@ public FrmVenta() {
         jPanel4 = new javax.swing.JPanel();
         btnSalir = new javax.swing.JButton();
         btnRegistrarVenta = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
 
         setTitle("Registro de Venta");
         setToolTipText("");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Busqueda...", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12), new java.awt.Color(51, 102, 255))); // NOI18N
 
+        txtIdProducto.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
         btnBuscarProducto.setText("Buscar");
         btnBuscarProducto.addActionListener(this::btnBuscarProductoActionPerformed);
 
         txtNombreProducto.setEditable(false);
 
+        txtCantidad.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtCantidad.setText("1");
         txtCantidad.setCaretPosition(0);
 
@@ -175,11 +194,16 @@ public FrmVenta() {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "IMPORTES", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12), new java.awt.Color(51, 102, 255))); // NOI18N
 
+        txtSubtotalFinal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
         jLabel4.setText("Subtotal:");
+
+        txtImpuestoFinal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
         jLabel5.setText("Impuesto (18%):");
 
         txtTotalFinal.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtTotalFinal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtTotalFinal.addActionListener(this::txtTotalFinalActionPerformed);
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -190,7 +214,7 @@ public FrmVenta() {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -205,10 +229,11 @@ public FrmVenta() {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSubtotalFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel4))
+                    .addComponent(txtSubtotalFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtImpuestoFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -234,10 +259,10 @@ public FrmVenta() {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnRegistrarVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(btnRegistrarVenta)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSalir)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -249,26 +274,37 @@ public FrmVenta() {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(51, 102, 255));
+        jLabel8.setText("REGISTRO DE VENTAS");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(265, 265, 265)
+                        .addComponent(jLabel8)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addContainerGap()
+                .addComponent(jLabel8)
+                .addGap(3, 3, 3)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -424,34 +460,16 @@ String textoId = txtIdProducto.getText().trim();
             double total = subtotalAcumulado + impuesto;
             venta.setImpuesto(impuesto);
             venta.setTotal(total);
+          
+            //Se captura el id del usuario logueado
+            Usuario usuario = UsuarioService.getUsuarioLogueado();
+            if (usuario == null) {
+               JOptionPane.showMessageDialog(this, "No existe un usuario autenticado.");
+               return;
+            }
+            venta.setUsuario(usuario);
             
-            
-            
-            
-            
-                                                                // ATENCION
-            /**
-            Como la tabla "venta" requiere obligatoriamente un "id_usuario",
-            usamos temporalmente el ID 1 para registrar ventas sin errores de SQL.
-            **/
-            modelo.Usuario usuarioSimulado = new modelo.Usuario();
-            usuarioSimulado.setIdUsuario(1); 
-            venta.setUsuario(usuarioSimulado);
-            
-            /**
-            Cuando el módulo de Usuarios e Inicio de Sesión esté terminado, 
-            borra las 3 líneas de arriba (del usuario simulado) y reemplaza por la linea de abajo.
-           
-           * 
-           * Cambiar por el nombre de la variable
-            venta.setUsuario( servicio.UsuarioService.getUsuarioLogueado() );
-            **/
-            
-            
-            
-            
-            
-            
+                        
             //Invocar la capa de Servicio para procesar la transacción
             if (servicioVenta.insertar(venta, carrito)) {
                 // Si la transacción SQL hace COMMIT exitoso en el DAO
@@ -489,7 +507,61 @@ String textoId = txtIdProducto.getText().trim();
         this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
 
+    public FrmVenta(int idVenta) {
+        this(); 
 
+        this.modoConsulta = true;
+        this.idVentaConsulta = idVenta;
+
+        cargarVenta(idVenta);
+        bloquearFormulario();
+    }
+    
+    private void cargarVenta(int idVenta){
+        modelo.Venta venta = servicioVenta.buscarVenta(idVenta);
+        
+        if(venta == null){
+            JOptionPane.showMessageDialog(this,"No existe la venta.");
+            return;
+        }
+        
+        carrito.clear();
+        modeloTabla.setRowCount(0);
+        subtotalAcumulado = 0;
+        
+        java.util.List<modelo.DetalleVenta> detalles = servicioVenta.listarDetalleVenta(idVenta);
+        
+        for(modelo.DetalleVenta detalle : detalles){
+            carrito.add(detalle);
+            
+            modeloTabla.addRow(new Object[]{
+                detalle.getProducto().getIdProducto(),
+                detalle.getProducto().getNombre(),
+                detalle.getCantidad(),
+                detalle.getPrecioVenta(),
+                detalle.getSubtotal()
+            });
+            
+            subtotalAcumulado += detalle.getSubtotal();
+        }
+        
+        txtSubtotalFinal.setText(String.format("%.2f", subtotalAcumulado));
+        txtImpuestoFinal.setText(String.format("%.2f", venta.getImpuesto()));
+        txtTotalFinal.setText(String.format("%.2f", venta.getTotal()));
+    }
+    
+    private void bloquearFormulario() {
+        btnBuscarProducto.setEnabled(false);
+        btnAgregar.setEnabled(false);
+        btnRegistrarVenta.setEnabled(false);
+
+        txtIdProducto.setEditable(false);
+        txtCantidad.setEditable(false);
+
+        tblCarrito.setEnabled(false);
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscarProducto;
@@ -499,6 +571,7 @@ String textoId = txtIdProducto.getText().trim();
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

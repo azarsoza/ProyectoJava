@@ -1,4 +1,8 @@
 package vista;
+/**
+ *
+ * @author ZARSOZA-PC
+ */
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
@@ -7,6 +11,7 @@ import modelo.Empleado;
 import servicio.EmpleadoService;
 
 public class FrmEmpleado extends javax.swing.JInternalFrame {
+    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private final EmpleadoService service = new EmpleadoService();
     private DefaultTableModel modelo;
     private int filaSeleccionada = -1;
@@ -40,7 +45,7 @@ public class FrmEmpleado extends javax.swing.JInternalFrame {
         txtDireccion.setText("");
         txtCorreo.setText("");
         txtCargo.setText("");
-        txtFechaIngreso.setText("");
+        txtFechaIngreso.setText(LocalDate.now().format(formato));
         txtSueldo.setText("");
         chkActivo.setSelected(true);
     }
@@ -118,6 +123,8 @@ public class FrmEmpleado extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Código:");
 
+        txtCodigo.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
         jLabel2.setText("Nombres:");
 
         txtNombres.addActionListener(new java.awt.event.ActionListener() {
@@ -130,7 +137,11 @@ public class FrmEmpleado extends javax.swing.JInternalFrame {
 
         jLabel4.setText("DNI:");
 
+        txtDni.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
         jLabel5.setText("Teléfono:");
+
+        txtTelefono.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
         jLabel6.setText("Dirección:");
 
@@ -223,6 +234,9 @@ public class FrmEmpleado extends javax.swing.JInternalFrame {
 
         txtFechaIngreso.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
 
+        txtSueldo.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtSueldo.setText("0.00");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -287,14 +301,12 @@ public class FrmEmpleado extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblEmpleado.setColumnSelectionAllowed(true);
         tblEmpleado.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblEmpleadoMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tblEmpleado);
-        tblEmpleado.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);

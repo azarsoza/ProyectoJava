@@ -1,4 +1,8 @@
 package vista;
+/**
+ *
+ * @author ZARSOZA-PC
+ */
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -67,6 +71,8 @@ public class FrmProducto extends javax.swing.JInternalFrame  {
         jLabel3.setText("Precio Venta:");
 
         jLabel4.setText("Categoria:");
+
+        txtIdProducto.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
         btnCategoria.setText("...");
         btnCategoria.addActionListener(new java.awt.event.ActionListener() {
@@ -240,13 +246,6 @@ public class FrmProducto extends javax.swing.JInternalFrame  {
             }
         });
         jScrollPane1.setViewportView(tblProducto);
-        if (tblProducto.getColumnModel().getColumnCount() > 0) {
-            tblProducto.getColumnModel().getColumn(0).setResizable(false);
-            tblProducto.getColumnModel().getColumn(1).setResizable(false);
-            tblProducto.getColumnModel().getColumn(2).setResizable(false);
-            tblProducto.getColumnModel().getColumn(3).setResizable(false);
-            tblProducto.getColumnModel().getColumn(4).setResizable(false);
-        }
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);

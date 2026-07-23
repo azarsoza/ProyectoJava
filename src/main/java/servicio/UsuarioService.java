@@ -5,6 +5,7 @@ import modelo.Usuario;
 
 public class UsuarioService {
     private final UsuarioDAO dao;
+    private static Usuario usuarioLogueado;
     
     public UsuarioService(){
         dao = new UsuarioDAO();
@@ -31,7 +32,19 @@ public class UsuarioService {
     }
     
     public Usuario login(String usuario, String clave){
-        return dao.login(usuario, clave);
+        Usuario u = dao.login(usuario, clave);
+        if(u != null){
+            usuarioLogueado = u;
+        }
+        return u;
+    }
+    
+    public static Usuario getUsuarioLogueado() {
+        return usuarioLogueado;
+    }
+    
+     public static void cerrarSesion() {
+        usuarioLogueado = null;
     }
     
     public boolean existeUsuario(String usuario) {
